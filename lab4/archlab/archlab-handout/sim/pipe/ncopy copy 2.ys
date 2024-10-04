@@ -1,0 +1,118 @@
+#/* $begin ncopy-ys */
+##################################################################
+# ncopy.ys - Copy a src block of len words to dst.
+# Return the number of positive words (>0) contained in src.
+#
+# Include your name and ID here.
+#
+# Describe how and why you modified the baseline code.
+#
+##################################################################
+# Do not modify this portion
+# Function prologue.
+# %rdi = src, %rsi = dst, %rdx = len
+ncopy:
+
+##################################################################
+# You can modify this portion
+	# Loop header
+	andq %rdx,%rdx		# len <= 0?
+	jle Done		# if so, goto Done:
+	jmp test1
+
+# 首先进行多路的测试
+Loop:
+	mrmovq (%rdi),%r10
+	rmmovq %r10,(%rsi)
+	andq %r10,%r10
+	jle Loop1
+	iaddq $1,%rax
+Loop1:
+	mrmovq 8(%rdi),%r10
+	rmmovq %r10,8(%rsi)
+	andq %r10,%r10
+	jle Loop2
+	iaddq $1,%rax
+Loop2:
+	mrmovq 16(%rdi),%r10
+	rmmovq %r10,16(%rsi)
+	andq %r10,%r10
+	jle Loop3
+	iaddq $1,%rax
+Loop3:
+	mrmovq 24(%rdi),%r10
+	rmmovq %r10,24(%rsi)
+	andq %r10,%r10
+	jle Loop4
+	iaddq $1,%rax
+Loop4:
+	mrmovq 32(%rdi),%r10
+	rmmovq %r10,32(%rsi)
+	andq %r10,%r10
+	jle Loop5
+	iaddq $1,%rax
+Loop5:
+	mrmovq 40(%rdi),%r10
+	rmmovq %r10,40(%rsi)
+	iaddq $48,%rdi
+	iaddq $48,%rsi
+	andq %r10,%r10
+	jle test1
+	iaddq $1,%rax
+# 此时是否可以 -6, 此时可以一个一个的测试
+test1:
+	iaddq $-6,%rdx
+	andq %rdx,%rdx
+	jg Loop
+	iaddq $6,%rdx
+	jmp test2
+# 下面利用三路递归的方式
+Loop_out:
+	mrmovq (%rdi),%r10
+	rmmovq %r10,(%rsi)
+	andq %r10,%r10
+	jle Loop_out1
+	iaddq $1,%rax
+Loop_out1:
+	mrmovq 8(%rdi),%r10
+	rmmovq %r10,8(%rsi)
+	andq %r10,%r10
+	jle Loop_out2
+	iaddq $1,%rax
+Loop_out2:
+	mrmovq 16(%rdi),%r10
+	rmmovq %r10,16(%rsi)
+	iaddq $24,%rdi
+	iaddq $24,%rsi
+	andq %r10,%r10
+	jle test2
+	iaddq $1,%rax
+test2:
+	iaddq $-3,%rdx
+	andq %rdx,%rdx
+	jg Loop_out
+	iaddq $3,%rdx
+# 最后此时三个数字
+Last_Loop:
+	mrmovq (%rdi),%r10
+	rmmovq %r10,(%rsi)
+	andq %r10,%r10
+	jle last_test
+	iaddq $1,%rax
+last_test:
+	iaddq $8,%rdi
+	iaddq $8,%rsi
+	iaddq $-1,%rdx
+	andq %rdx,%rdx
+	jle Done
+	jmp Last_Loop
+
+##################################################################
+# Do not modify the following section of code
+# Function epilogue.
+Done:
+	ret
+##################################################################
+# Keep the following label at the end of your function
+End:
+#/* $end ncopy-ys */
