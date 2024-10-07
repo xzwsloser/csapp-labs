@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "cachelab.h": "c",
+        "unistd.h": "c",
+        "features.h": "c",
+        "stdio.h": "c"
+    }
+}
