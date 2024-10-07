@@ -19,9 +19,10 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
  *     searches for that string to identify the transpose function to
  *     be graded. 
  */
-char trans_desc_handle32[] = "hand32";
+char trans_desc_handle32[] = "Transpose submission";
 void handler_32(int M, int N, int A[N][M], int B[M][N])
 {
+
     int temp1 , temp2 , temp3 , temp4 , temp5 , temp6 , temp7 , temp8;
     // int temp1 , temp2 , temp3 , temp4;
 
@@ -78,7 +79,7 @@ void handler_32(int M, int N, int A[N][M], int B[M][N])
  * You can define additional transpose functions below. We've defined
  * a simple one below to help you get started. 
  */ 
-char trans_desc_handle64[] = "handle64";
+char trans_desc_handle64[] = "Transpose submission";
 void hanlder_64(int M, int N, int A[N][M], int B[M][N])
 {
     // 思路: 这里每一次 load 或者 store 的时候只可以利用 4 * 4 的方式,否则就会导致冲突
@@ -168,6 +169,13 @@ void hanlder_odd(int M, int N, int A[N][M], int B[M][N])
     // N = 67 , M = 61, 需要反过来
     // M = 61 , N = 67
     // 67 * 61
+    if(M == 32 && N == 32) {
+        handler_32(M , N , A , B);
+        return ;
+    } else if(M == 64 && N == 64) {
+        hanlder_64(M , N , A , B);
+        return ;
+    }
     int temp1 , temp2 , temp3 , temp4 , temp5 , temp6 , temp7 , temp8;
     int i , j;
     for(i = 0 ; i < 64 ; i += 8) {
@@ -270,8 +278,8 @@ void registerFunctions()
 {
     /* Register your solution function */
     registerTransFunction(hanlder_odd , trans_desc_handle_odd); 
-    registerTransFunction(hanlder_64 , trans_desc_handle64); 
-    registerTransFunction(handler_32 , trans_desc_handle32); 
+    // registerTransFunction(hanlder_64 , trans_desc_handle64); 
+    // registerTransFunction(handler_32 , trans_desc_handle32); 
 
     /* Register any additional transpose functions */
     // registerTransFunction(trans, trans_desc); 

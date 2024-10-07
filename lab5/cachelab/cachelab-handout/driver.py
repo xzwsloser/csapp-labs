@@ -1,4 +1,4 @@
-#!/usr//bin/python
+#!/usr//bin/python3
 #
 # driver.py - The driver tests the correctness of the student's cache
 #     simulator and the correctness and performance of their transpose
@@ -53,9 +53,8 @@ def main():
     p = subprocess.Popen("./test-csim", 
                          shell=True, stdout=subprocess.PIPE)
     stdout_data = p.communicate()[0]
-
     # Emit the output from test-csim
-    stdout_data = re.split('\n', stdout_data)
+    stdout_data = re.split("\n", str(stdout_data, 'utf-8'))
     for line in stdout_data:
         if re.match("TEST_CSIM_RESULTS", line):
             resultsim = re.findall(r'(\d+)', line)
@@ -69,24 +68,24 @@ def main():
     p = subprocess.Popen("./test-trans -M 32 -N 32 | grep TEST_TRANS_RESULTS", 
                          shell=True, stdout=subprocess.PIPE)
     stdout_data = p.communicate()[0]
-    result32 = re.findall(r'(\d+)', stdout_data)
+    result32 = re.findall(r'(\d+)', str(stdout_data, 'utf-8'))
     
     # 64x64 transpose
     print ("Running ./test-trans -M 64 -N 64")
     p = subprocess.Popen("./test-trans -M 64 -N 64 | grep TEST_TRANS_RESULTS", 
                          shell=True, stdout=subprocess.PIPE)
     stdout_data = p.communicate()[0]
-    result64 = re.findall(r'(\d+)', stdout_data)
+    result64 = re.findall(r'(\d+)', str(stdout_data, 'utf-8'))
     
     # 61x67 transpose
     print ("Running ./test-trans -M 61 -N 67")
     p = subprocess.Popen("./test-trans -M 61 -N 67 | grep TEST_TRANS_RESULTS", 
                          shell=True, stdout=subprocess.PIPE)
     stdout_data = p.communicate()[0]
-    result61 = re.findall(r'(\d+)', stdout_data)
+    result61 = re.findall(r'(\d+)', str(stdout_data, 'utf-8'))
     
     # Compute the scores for each step
-    csim_cscore  = map(int, resultsim[0:1])
+    csim_cscore  = list(map(int, resultsim[0:1]))   
     trans_cscore = int(result32[0]) * int(result64[0]) * int(result61[0]);
     miss32 = int(result32[1])
     miss64 = int(result64[1])
@@ -99,7 +98,7 @@ def main():
     # Summarize the results
     print ("\nCache Lab summary:")
     print ("%-22s%8s%10s%12s" % ("", "Points", "Max pts", "Misses"))
-    print ("%-22s%8.1f%10d" % ("Csim correctness", csim_cscore[0],
+    print ("%-22s%8.1f%10d" % ("Csim correctness", csim_cscore[0], 
                               maxscore['csim']))
 
     misses = str(miss32)

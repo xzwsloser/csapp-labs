@@ -243,3 +243,4 @@ void hanlder_odd(int M, int N, int A[N][M], int B[M][N])
 - 最终的命中率:
 ![alt text](<img/image copy 5.png>)
 - 至此,`cacheLab`结束!
+![alt text](<img/image copy 6.png>)
